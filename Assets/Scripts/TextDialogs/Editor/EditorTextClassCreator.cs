@@ -2,21 +2,19 @@
 using UnityEditor;
 using System.Collections;
 
-[CustomEditor( typeof( ManagerAI ) )]
+[CustomEditor( typeof( TextManager ) )]
 [CanEditMultipleObjects]
 public class EditorTextClassCreator : Editor {
     public override void OnInspectorGUI() {
-        TextClassCreator targetScript = target as TextClassCreator;
+        TextManager targetScript = target as TextManager;
         DrawDefaultInspector();
-        EditorGUILayout.HelpBox( "This will initialize the previous arrays. Before doing anything press this button or fill the arrays manually. The arrays can me modified.", MessageType.None );
-        if ( GUILayout.Button( "Init Vars" ) ) {
-            targetScript.InitVars();
+        if ( GUILayout.Button( "Generar GameStrings" ) ) {
+            string error = targetScript.CreateTextClass();
+            if ( error != null ) {
+                Debug.Log( string.Format("Hubo un error {0}", error ));
+            }
         }
 
-        EditorGUILayout.HelpBox( "This will affect only the TrackWaypoints on tracksOnScene.", MessageType.None );
-        if ( GUILayout.Button( "Set High Precision to tracksOnScene." ) ) {
-            targetScript.SetAllHighPrecision();
-        }
     }
 
 }
