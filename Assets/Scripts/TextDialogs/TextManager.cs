@@ -1,53 +1,119 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
+using System;
 
 public class TextManager : MonoBehaviour {
-    XMLParser texts;
     [HideInInspector] public static TextManager instance;
     [SerializeField] Languages language;
-    private const string GAME_STRINGS = "GameStrings.cs";
+    [HideInInspector] public static GameStrings dialogs;
+
+    private const string GAME_STRINGS = "GameStrings", EXTENSION = "cs";
+    static Dictionary<string, bool> areUsed = new Dictionary<string, bool>();
     // Use this for initialization
     void Awake() {
         instance = this;
-        string xml = Resources.Load<TextAsset>( string.Format( "Languages/{0}", language ) ).text;
-        texts = new XMLParser( xml );
+        ChangeLangauge( language );
     }
 
-    public string GetDialog( string key ) {
-        return texts.dialog[key];
-    }
 
     public void ChangeLangauge( Languages newLanguage ) {
-        language = newLanguage;
-        string xml = Resources.Load<TextAsset>( string.Format( "Languages/{0}", language ) ).text;
-        texts = new XMLParser( xml );
+        switch ( newLanguage ) {
+            case Languages.English:
+                dialogs = new English();
+                break;
+            case Languages.Spanish:
+                dialogs = new Spanish();
+                break;
+        }
     }
 
 #if UNITY_EDITOR
-    public string CreateTextClass() {
+    public string CreateTextClass( Languages language ) {
+        string outputLangFile = string.Format( "{0}_{1}.{2}", GAME_STRINGS, language, EXTENSION );
         string xml = Resources.Load<TextAsset>( string.Format( "Languages/{0}", language ) ).text;
-        Dictionary<string, string> keyTexts = XMLParser.CrateDict( xml );
-        if ( File.Exists( string.Format("Assets/Resources/{0}", GAME_STRINGS ) ) ) {
-            File.Delete( string.Format( "Assets/Resources/{0}", GAME_STRINGS ) );
+
+        Dictionary<string, string> keyTexts = XMLParser.CreateDict( xml );
+        if ( File.Exists( string.Format("Assets/Resources/{0}", outputLangFile ) ) ) {
+            File.Delete( string.Format( "Assets/Resources/{0}", outputLangFile ) );
         }
-        using ( StreamWriter sw = File.CreateText( string.Format( "Assets/Resources/{0}", GAME_STRINGS ) ) ) {
+        FileStream fs = null;
+        try {
+            fs = new FileStream( string.Format( "Assets/Resources/{0}", outputLangFile), FileMode.CreateNew );
+            using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8 )) {
+                string line = "";
+                sw.WriteLine( "//Auto generated class, do not change." );
+                sw.Write( string.Format( "\npublic class {0}: {1} {{\n", language, GAME_STRINGS ) );
+                sw.WriteLine( string.Format( "\tpublic {0}(){{", language ));
+                foreach ( KeyValuePair<string, string> text in keyTexts ) {
+                    if ( text.Key.Contains( " " ) ) {
+                        sw.Write( "}" );
+                        return text.Key;
+                    }
+                    areUsed[text.Key] = true;
+                    line = string.Format( "\t\t{0} = \"{1}\";\n", text.Key, text.Value );
+                    sw.Write( line );
+                }
+                sw.Write( "\t}\n}" );
+            }
+        }
+        catch {
+            return "File error";
+        }
+        finally {
+            if(fs != null ) {
+                fs.Dispose();
+            }
+        }
+        return null;  
+    }
+
+    public string CreateBaseTextClass() {
+        string outputBaseFile = string.Format( "{0}.{1}", GAME_STRINGS, EXTENSION );
+
+        if ( File.Exists( string.Format( "Assets/Resources/{0}", outputBaseFile ) ) ) {
+            File.Delete( string.Format( "Assets/Resources/{0}", outputBaseFile ) );
+        }
+
+        using ( StreamWriter sw = File.CreateText( string.Format( "Assets/Resources/{0}", outputBaseFile ) ) ) {
             string line = "";
             sw.WriteLine( "//Auto generated class, do not change." );
-            sw.Write( "\nclass GS {\n" );
-            foreach(KeyValuePair<string, string> text in keyTexts ) {
-                if ( text.Key.Contains( " " ) ) {
+            sw.WriteLine( string.Format("\npublic class  {0}{{", GAME_STRINGS ));
+            foreach ( KeyValuePair<string, bool> isUsed in areUsed ) {
+                if ( isUsed.Key.Contains( " " ) ) {
                     sw.Write( "}" );
-                    return text.Key;
+                    return isUsed.Key;
                 }
-                line = string.Format( "\tpublic static string {0} = \"{1}\";\n", text.Key, text.Key );
-                sw.Write( line );
+                if ( isUsed.Value ) {
+                    line = string.Format( "\tpublic string {0};\n", isUsed.Key );
+                    sw.Write( line );
+                }else {
+                    areUsed.Remove( isUsed.Key );
+                }
             }
             sw.Write( "}" );
         }
 
-        return null;  
+        Debug.Log( "Archivos creados exitosamente" );
+
+        return null;
+    }
+
+    public string UpdateLanguages() {
+        foreach(KeyValuePair<string, bool> isUsed in areUsed ) {
+            areUsed[isUsed.Key] = false;
+        }
+        foreach(Languages l in Enum.GetValues( typeof(Languages) )) {
+            string message = CreateTextClass( l );
+            if ( message != null ) {
+                return message;
+            }
+        }
+
+        return CreateBaseTextClass();
+
     }
 #endif
 }

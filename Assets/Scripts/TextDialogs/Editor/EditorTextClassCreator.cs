@@ -8,8 +8,8 @@ public class EditorTextClassCreator : Editor {
     public override void OnInspectorGUI() {
         TextManager targetScript = target as TextManager;
         DrawDefaultInspector();
-        if ( GUILayout.Button( "Generar GameStrings" ) ) {
-            string error = targetScript.CreateTextClass();
+        if ( GUILayout.Button( "Actualizar GameStrings" ) ) {
+            string error = targetScript.UpdateLanguages();
             if ( error != null ) {
                 Debug.Log( string.Format("Hubo un error {0}", error ));
             }

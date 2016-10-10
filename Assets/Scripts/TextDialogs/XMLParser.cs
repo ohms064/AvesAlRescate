@@ -3,7 +3,7 @@ using System.Xml;
 using System.IO;
 
 public class XMLParser {
-    private const string DIALOG = "dialog", NARRATIVE = "narrative", TYPE = "type", NAME = "name", STRING_KEY = "string";
+    private const string DIALOG = "dialog", NARRATIVE = "narrative", TYPE = "type", NAME = "name", STRING_KEY = "string", TEXTS = "text", LANGUAGE = "language";
     public Dictionary<string, string> dialog;
 
     public XMLParser( string xmlString ) {
@@ -11,6 +11,9 @@ public class XMLParser {
         dialog = new Dictionary<string, string>();
 
         using ( XmlReader reader = XmlReader.Create( new StringReader( xmlString ) ) ) {
+            //if ( (reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals( TEXTS )) && reader.Read() ) {
+            //    lang = reader.GetAttribute( LANGUAGE );
+            //}
             while ( reader.Read() ) {
                 if ( (reader.NodeType == XmlNodeType.Element) && (reader.Name.Equals( STRING_KEY )) ) {
                     attribute = reader.GetAttribute( NAME );
@@ -23,7 +26,7 @@ public class XMLParser {
     }
     
 
-    public static Dictionary<string, string> CrateDict( string xmlString ) {
+    public static Dictionary<string, string> CreateDict( string xmlString ) {
         Dictionary<string, string> output = new Dictionary<string, string>();
         string attribute;
 

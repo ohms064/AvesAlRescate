@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
-<language>
-  <string name="test" type="dialog">PruebaInglés</string>
-  <string name="test2" type="narrative">Prueba1</string>
-  <string name="test3" type="dialog">Prueba2</string>
-</language>
+<languages>
+
+    <string name="test" type="dialog">PruebaInglés</string>
+    <string name="test2" type="narrative">Prueba1</string>
+    <string name="test3" type="dialog">Prueba2</string>
+</languages>
