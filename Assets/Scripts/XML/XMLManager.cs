@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LanguageSerializer : MonoBehaviour {
+public class XMLManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

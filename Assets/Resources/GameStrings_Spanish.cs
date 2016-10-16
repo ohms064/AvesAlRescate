@@ -16,5 +16,6 @@ public class Spanish: GameStrings {
 		stop = "Detener";
 		waiting = "Conectando";
 		no_gps = "GPS Desactivado";
+		save_location = "Guardar";
 	}
 }

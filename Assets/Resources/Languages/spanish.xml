@@ -14,4 +14,5 @@
   <string name="stop" type="dialog">Detener</string>
   <string name="waiting" type="dialog">Conectando</string>
   <string name="no_gps" type="dialog">GPS Desactivado</string>
+  <string name="save_location" type="dialog">Guardar</string>
 </language>

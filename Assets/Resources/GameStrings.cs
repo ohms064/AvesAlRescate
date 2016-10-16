@@ -15,4 +15,5 @@ public class  GameStrings{
 	public string stop;
 	public string waiting;
 	public string no_gps;
+	public string save_location;
 }
