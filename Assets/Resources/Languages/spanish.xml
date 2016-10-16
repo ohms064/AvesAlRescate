@@ -3,4 +3,15 @@
     <string name="test" type="dialog">PruebaEspañol</string>
     <string name="test2" type="narrative">Prueba1</string>
     <string name="test3" type="dialog">Prueba2</string>
+  <string name="status" type="dialog">Status</string>
+  <string name="timeout" type="dialog">¡Timeout!</string>
+  <string name="location_failure" type="dialog">No se encontró la ubicación del dispositivo</string>
+  <string name="connected" type="dialog">¡Conectado!</string>
+  <string name="longitude" type="dialog">Longitud</string>
+  <string name="latitude" type="dialog">Latitud</string>
+  <string name="altitude" type="dialog">Altitud</string>
+  <string name="locate" type="dialog">Localizar</string>
+  <string name="stop" type="dialog">Detener</string>
+  <string name="waiting" type="dialog">Conectando</string>
+  <string name="no_gps" type="dialog">GPS Desactivado</string>
 </language>

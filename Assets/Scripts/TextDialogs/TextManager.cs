@@ -1,25 +1,36 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System;
 
 public class TextManager : MonoBehaviour {
+
     [HideInInspector] public static TextManager instance;
     [SerializeField] Languages language;
     [HideInInspector] public static GameStrings dialogs;
+    ITranslatable[] texts;
 
     private const string GAME_STRINGS = "GameStrings", EXTENSION = "cs";
     static Dictionary<string, bool> areUsed = new Dictionary<string, bool>();
     // Use this for initialization
     void Awake() {
         instance = this;
-        ChangeLangauge( language );
     }
 
+    void Start() {
+        texts = InterfaceHelper.FindObjects<ITranslatable>();
+        ChangeLangauge( language);
+    }
 
     public void ChangeLangauge( Languages newLanguage ) {
+        LangaugeChooser( newLanguage );
+        foreach (ITranslatable t in texts ) {
+            t.ChangeLanguage();
+        }
+    }
+
+    private void LangaugeChooser( Languages newLanguage ) {
         switch ( newLanguage ) {
             case Languages.English:
                 dialogs = new English();
@@ -31,6 +42,11 @@ public class TextManager : MonoBehaviour {
     }
 
 #if UNITY_EDITOR
+    /// <summary>
+    /// Crea una clase con los valores de las cadenas para un lenguaje.
+    /// </summary>
+    /// <param name="language"></param>
+    /// <returns>Mensajes de error en caso de existir uno.</returns>
     public string CreateTextClass( Languages language ) {
         string outputLangFile = string.Format( "{0}_{1}.{2}", GAME_STRINGS, language, EXTENSION );
         string xml = Resources.Load<TextAsset>( string.Format( "Languages/{0}", language ) ).text;
@@ -70,6 +86,10 @@ public class TextManager : MonoBehaviour {
         return null;  
     }
 
+    /// <summary>
+    /// Creates the base class where all languages classes will inherit from.
+    /// </summary>
+    /// <returns>An error message if any.</returns>
     public string CreateBaseTextClass() {
         string outputBaseFile = string.Format( "{0}.{1}", GAME_STRINGS, EXTENSION );
 
@@ -101,6 +121,10 @@ public class TextManager : MonoBehaviour {
         return null;
     }
 
+    /// <summary>
+    /// Updates all languages classes.
+    /// </summary>
+    /// <returns>A error message if any.</returns>
     public string UpdateLanguages() {
         foreach(KeyValuePair<string, bool> isUsed in areUsed ) {
             areUsed[isUsed.Key] = false;

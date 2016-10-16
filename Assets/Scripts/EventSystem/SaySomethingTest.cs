@@ -11,7 +11,6 @@ public class SaySomethingTest : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         var va = TextManager.dialogs;
-        var sa = va.test;
         print( string.Format( "valor: {0} {1}", va, va.test ));
         if ( Input.GetKeyDown( KeyCode.E ) ) {
             print( "Inglés" );
