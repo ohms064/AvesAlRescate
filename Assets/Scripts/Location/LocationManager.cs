@@ -74,7 +74,7 @@ public class LocationManager : MonoBehaviour, ITranslatable {
         }
         else {
             gpsStatus = TextManager.dialogs.connected;
-            statusText.text = string.Format( "{0}: {1}", TextManager.dialogs.latitude, gpsStatus);
+            statusText.text = string.Format( "{0}: {1}", TextManager.dialogs.status, gpsStatus);
             // Access granted and location value could be retrieved
             longText.text = string.Format("{0}: {1}", TextManager.dialogs.longitude, lastCoordinate.longitude.ToString());
             latText.text = string.Format( "{0}: {1}", TextManager.dialogs.latitude, lastCoordinate.latitude.ToString());

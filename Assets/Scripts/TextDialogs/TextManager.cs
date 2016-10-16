@@ -20,7 +20,7 @@ public class TextManager : MonoBehaviour {
 
     void Start() {
         texts = InterfaceHelper.FindObjects<ITranslatable>();
-        ChangeLangauge( language);
+        ChangeLangauge( language );
     }
 
     public void ChangeLangauge( Languages newLanguage ) {
@@ -28,6 +28,9 @@ public class TextManager : MonoBehaviour {
         foreach (ITranslatable t in texts ) {
             t.ChangeLanguage();
         }
+    }
+    public void ChangeLangauge( int newLanguage ) {
+        ChangeLangauge( (Languages)newLanguage );
     }
 
     private void LangaugeChooser( Languages newLanguage ) {
