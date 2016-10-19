@@ -17,5 +17,7 @@ public class Spanish: GameStrings {
 		waiting = "Conectando";
 		no_gps = "GPS Desactivado";
 		save_location = "Guardar";
+		saved_location = "Guardado";
+		not_saved_location = "No se guardó";
 	}
 }

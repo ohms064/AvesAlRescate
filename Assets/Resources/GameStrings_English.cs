@@ -17,5 +17,7 @@ public class English: GameStrings {
 		waiting = "Connecting";
 		no_gps = "GPS is not enabled";
 		save_location = "Save";
+		saved_location = "Saved";
+		not_saved_location = "Didn't save location";
 	}
 }

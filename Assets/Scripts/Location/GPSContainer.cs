@@ -59,7 +59,7 @@ public class GPSContainer {
         return gps;
     }
 
-    public void Serialize( string path ) {
+    public void SerializeList( string path ) {
         XmlSerializer serializer = new XmlSerializer( typeof(List<GPSCoordinate> ) );
 #if UNITY_ANDROID
         string completePath = Application.persistentDataPath + "/" + path;
@@ -67,6 +67,20 @@ public class GPSContainer {
         string completePath = path;
 #endif
         Debug.LogFormat(  "Saving to path: {0}", completePath  );
+        TextWriter tw = new StreamWriter( completePath );
+        serializer.Serialize( tw, coordinates );
+        Debug.Log( "Save Finished" );
+        tw.Close();
+    }
+
+    public void SerializeArray( string path, GPSCoordinate[] coordinates ) {
+        XmlSerializer serializer = new XmlSerializer( typeof( GPSCoordinate[] ) );
+#if UNITY_ANDROID
+        string completePath = Application.persistentDataPath + "/" + path;
+#else
+        string completePath = path;
+#endif
+        Debug.LogFormat( "Saving to path: {0}", completePath );
         TextWriter tw = new StreamWriter( completePath );
         serializer.Serialize( tw, coordinates );
         Debug.Log( "Save Finished" );

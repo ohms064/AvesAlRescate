@@ -6,7 +6,8 @@ using System;
 
 public class LocationManager : MonoBehaviour, ITranslatable {
 
-    private const string XmlPath = "locations.xml";
+    private const string XmlPathList = "locations_list.xml";
+    private const string XmlArrayPath = "locations_arr.xml";
 
 
     [HideInInspector]
@@ -26,7 +27,7 @@ public class LocationManager : MonoBehaviour, ITranslatable {
     void Start() {
         Begin();
         Debug.Log( "Loading!" );
-        gpsData = GPSContainer.Load( XmlPath );
+        gpsData = GPSContainer.Load( XmlPathList );
 
     }
 
@@ -95,16 +96,30 @@ public class LocationManager : MonoBehaviour, ITranslatable {
 
     public void SaveLocation() {
         Debug.LogFormat( "Saving Data:  {0}", lastData );
+        
         if ( lastData ){
             Debug.LogFormat( "Array: {0}", gpsData.coordinates.ToString() );
             gpsData.coordinates.Add( new GPSCoordinate( lastCoordinate, nameInput.text ) );
             lastData = false;
+            SerializeGPS();
+            gpsStatus = TextManager.dialogs.saved_location;
+            statusText.text = string.Format( "{0}: {1}", TextManager.dialogs.status, gpsStatus );
+        }
+        else {
+            gpsStatus = TextManager.dialogs.not_saved_location;
+            statusText.text = string.Format( "{0}: {1}", TextManager.dialogs.status, gpsStatus );
         }
     }
 
     public void SerializeGPS() {
         Debug.Log( "Serializing" );
-        gpsData.Serialize( XmlPath );
+        gpsData.SerializeList( XmlPathList );
+    }
+
+    public void SaveOrderedGPS() {
+        Debug.Log( "Serializing Ordered List" );
+        GPSCoordinate[] orderedGPS = LocationProximityTools.SortByProximity( new GPSCoordinate( lastCoordinate, nameInput.text ), gpsData.coordinates );
+        gpsData.SerializeArray( XmlArrayPath, orderedGPS );
     }
 
     public void ChangeLanguage() {

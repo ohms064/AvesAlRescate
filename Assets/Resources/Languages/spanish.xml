@@ -15,4 +15,6 @@
   <string name="waiting" type="dialog">Conectando</string>
   <string name="no_gps" type="dialog">GPS Desactivado</string>
   <string name="save_location" type="dialog">Guardar</string>
+  <string name="saved_location" type="dialog">Guardado</string>
+  <string name="not_saved_location" type="dialog">No se guardó</string>
 </language>

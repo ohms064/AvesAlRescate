@@ -16,4 +16,6 @@
   <string name="waiting" type="dialog">Connecting</string>
   <string name="no_gps" type="dialog">GPS is not enabled</string>
   <string name="save_location" type="dialog">Save</string>
+  <string name="saved_location" type="dialog">Saved</string>
+  <string name="not_saved_location" type="dialog">Didn't save location</string>
 </languages>

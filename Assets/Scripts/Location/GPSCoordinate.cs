@@ -31,4 +31,10 @@ public class GPSCoordinate {
 
     public string name { get; set; }
 
+    public static float Dot( GPSCoordinate first, GPSCoordinate second ) {
+        Vector3 firstVector = new SphereCoordinate { latitude = first.latitude, longitude = first.longitude, magnitude = 100 }.ToVector3();
+        Vector3 secondVector = new SphereCoordinate { latitude = second.latitude, longitude = second.longitude, magnitude = 100 }.ToVector3();
+        return Vector3.Dot( firstVector, secondVector );
+    }
+
 }
