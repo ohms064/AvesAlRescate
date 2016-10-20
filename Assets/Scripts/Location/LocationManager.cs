@@ -118,8 +118,14 @@ public class LocationManager : MonoBehaviour, ITranslatable {
 
     public void SaveOrderedGPS() {
         Debug.Log( "Serializing Ordered List" );
-        GPSCoordinate[] orderedGPS = LocationProximityTools.SortByProximity( new GPSCoordinate( lastCoordinate, nameInput.text ), gpsData.coordinates );
+        GPSCoordinate current = new GPSCoordinate( lastCoordinate, nameInput.text );
+        GPSCoordinate[] orderedGPS = LocationProximityTools.SortByProximity( current, gpsData.coordinates );
+        foreach(GPSCoordinate gps in orderedGPS ) {
+            gps.haversineDistance = GPSCoordinate.HaversineDistance( current, gps );
+        }
         gpsData.SerializeArray( XmlArrayPath, orderedGPS );
+        gpsStatus = "Order";
+        statusText.text = string.Format( "{0}: {1}", TextManager.dialogs.status, gpsStatus );
     }
 
     public void ChangeLanguage() {
